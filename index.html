@@ -106,4 +106,88 @@ prev_month_end_ddmmyyyy=$(date -d "$prev_month_end" +"%d%m%Y")
 echo "Previous Month Start Date: $prev_month_start_ddmmyyyy"
 echo "Previous Month End Date: $prev_month_end_ddmmyyyy"
 </body>
-</html>
+</html
+    #!/bin/ksh
+
+# Function to validate leap year
+is_leap_year() {
+    typeset year=$1
+    if (( (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 )); then
+        echo 1
+    else
+        echo 0
+    fi
+}
+
+# Check if date input is valid
+if [[ ! $1 =~ ^[0-9]{8}$ ]]; then
+    echo "Invalid date format. Use ddmmyyyy."
+    exit 1
+fi
+
+# Extract day, month, year
+day=${1:0:2}
+month=${1:2:2}
+year=${1:4:4}
+
+# Create Oracle date string for input date
+input_date="$year-$month-$day"
+
+# Calculate previous month using Oracle date functions
+previous_month_date=$(sqlplus -s /nolog <<EOF
+CONNECT user/password@database
+SET HEADING OFF
+SET FEEDBACK OFF
+SELECT TO_CHAR(ADD_MONTHS(TO_DATE('$input_date', 'YYYY-MM-DD'), -1), 'YYYY-MM-DD') FROM dual;
+EXIT;
+EOF
+)
+
+prev_month=$(echo $previous_month_date | cut -d- -f2)
+prev_year=$(echo $previous_month_date | cut -d- -f1)
+
+# Calculate start date of previous month
+prev_month_start="$prev_year$prev_month""01"
+
+# Calculate end date of previous month
+case $prev_month in
+    01|03|05|07|08|10|12)
+        prev_month_end="$prev_year$prev_month""31"
+        ;;
+    04|06|09|11)
+        prev_month_end="$prev_year$prev_month""30"
+        ;;
+    02)
+        if [ $(is_leap_year $prev_year) -eq 1 ]; then
+            prev_month_end="$prev_year$prev_month""29"
+        else
+            prev_month_end="$prev_year$prev_month""28"
+        fi
+        ;;
+esac
+
+# Convert start and end dates to ddmmyyyy format
+prev_month_start_ddmmyyyy=$(sqlplus -s /nolog <<EOF
+CONNECT user/password@database
+SET HEADING OFF
+SET FEEDBACK OFF
+SELECT TO_CHAR(TO_DATE('$prev_month_start', 'YYYYMMDD'), 'DDMMYYYY') FROM dual;
+EXIT;
+EOF
+)
+
+prev_month_end_ddmmyyyy=$(sqlplus -s /nolog <<EOF
+CONNECT user/password@database
+SET HEADING OFF
+SET FEEDBACK OFF
+SELECT TO_CHAR(TO_DATE('$prev_month_end', 'YYYYMMDD'), 'DDMMYYYY') FROM dual;
+EXIT;
+EOF
+)
+
+# Remove leading and trailing whitespace
+prev_month_start_ddmmyyyy=$(echo $prev_month_start_ddmmyyyy | xargs)
+prev_month_end_ddmmyyyy=$(echo $prev_month_end_ddmmyyyy | xargs)
+
+echo "Previous Month Start Date: $prev_month_start_ddmmyyyy"
+echo "Previous Month End Date: $prev_month_end_ddmmyyyy"
