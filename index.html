@@ -1,193 +1,452 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy_birthday_srilekha</title>
-    <script src="script.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <style>
-  .button {
-  background-color: #3f463f; 
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
-  cursor: pointer;
-}
- .anchor {
-  color: aliceblue;
-  text-decoration: none;
-  text-transform: uppercase;
-
-}
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <h1 id="headline">Countdown to Srilekha birthday</h1>
-        <div id="countdown">
-          <ul>
-            <li><span id="days"></span>days</li>
-            <li><span id="hours"></span>Hours</li>
-            <li><span id="minutes"></span>Minutes</li>
-            <li><span id="seconds"></span>Seconds</li>
-          </ul>
-        </div>
-        <div id="content" class="emoji">
-          <span>🥳</span>
-          <span>🎉</span>
-          <span>🎂</span><br>
-        
-          <button class="button"><a class="anchor" href="inner.html">click me</a></button>
-          
-        </div>
-      </div>#!/bin/bash
-
-# Function to validate leap year
-is_leap_year() {
-    year=$1
-    if (( (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 )); then
-        echo 1
-    else
-        echo 0
-    fi
-}
-
-# Check if date input is valid
-if [[ ! $1 =~ ^[0-9]{8}$ ]]; then
-    echo "Invalid date format. Use ddmmyyyy."
-    exit 1
-fi
-
-# Extract day, month, year
-day=${1:0:2}
-month=${1:2:2}
-year=${1:4:4}
-
-# Create date string for input date
-input_date="$year-$month-$day"
-
-# Calculate previous month
-previous_month_date=$(date -d "$input_date -1 month" +"%Y-%m-%d")
-prev_month=$(date -d "$previous_month_date" +"%m")
-prev_year=$(date -d "$previous_month_date" +"%Y")
-
-# Calculate start date of previous month
-prev_month_start="$prev_year$prev_month"01
-
-# Calculate end date of previous month
-case $prev_month in
-    01|03|05|07|08|10|12)
-        prev_month_end="$prev_year$prev_month"31
-        ;;
-    04|06|09|11)
-        prev_month_end="$prev_year$prev_month"30
-        ;;
-    02)
-        if [ $(is_leap_year $prev_year) -eq 1 ]; then
-            prev_month_end="$prev_year$prev_month"29
-        else
-            prev_month_end="$prev_year$prev_month"28
-        fi
-        ;;
-esac
-
-# Convert start and end dates to ddmmyyyy format
-prev_month_start_ddmmyyyy=$(date -d "$prev_month_start" +"%d%m%Y")
-prev_month_end_ddmmyyyy=$(date -d "$prev_month_end" +"%d%m%Y")
-
-echo "Previous Month Start Date: $prev_month_start_ddmmyyyy"
-echo "Previous Month End Date: $prev_month_end_ddmmyyyy"
-</body>
-</html
-    #!/bin/ksh
-
-# Function to validate leap year
-is_leap_year() {
-    typeset year=$1
-    if (( (year % 4 == 0 && year % 100 != 0) || year % 400 == 0 )); then
-        echo 1
-    else
-        echo 0
-    fi
-}
-
-# Check if date input is valid
-if [[ ! $1 =~ ^[0-9]{8}$ ]]; then
-    echo "Invalid date format. Use ddmmyyyy."
-    exit 1
-fi
-
-# Extract day, month, year
-day=${1:0:2}
-month=${1:2:2}
-year=${1:4:4}
-
-# Create Oracle date string for input date
-input_date="$year-$month-$day"
-
-# Calculate previous month using Oracle date functions
-previous_month_date=$(sqlplus -s /nolog <<EOF
-CONNECT user/password@database
-SET HEADING OFF
-SET FEEDBACK OFF
-SELECT TO_CHAR(ADD_MONTHS(TO_DATE('$input_date', 'YYYY-MM-DD'), -1), 'YYYY-MM-DD') FROM dual;
-EXIT;
-EOF
-)
-
-prev_month=$(echo $previous_month_date | cut -d- -f2)
-prev_year=$(echo $previous_month_date | cut -d- -f1)
-
-# Calculate start date of previous month
-prev_month_start="$prev_year$prev_month""01"
-
-# Calculate end date of previous month
-case $prev_month in
-    01|03|05|07|08|10|12)
-        prev_month_end="$prev_year$prev_month""31"
-        ;;
-    04|06|09|11)
-        prev_month_end="$prev_year$prev_month""30"
-        ;;
-    02)
-        if [ $(is_leap_year $prev_year) -eq 1 ]; then
-            prev_month_end="$prev_year$prev_month""29"
-        else
-            prev_month_end="$prev_year$prev_month""28"
-        fi
-        ;;
-esac
-
-# Convert start and end dates to ddmmyyyy format
-prev_month_start_ddmmyyyy=$(sqlplus -s /nolog <<EOF
-CONNECT user/password@database
-SET HEADING OFF
-SET FEEDBACK OFF
-SELECT TO_CHAR(TO_DATE('$prev_month_start', 'YYYYMMDD'), 'DDMMYYYY') FROM dual;
-EXIT;
-EOF
-)
-
-prev_month_end_ddmmyyyy=$(sqlplus -s /nolog <<EOF
-CONNECT user/password@database
-SET HEADING OFF
-SET FEEDBACK OFF
-SELECT TO_CHAR(TO_DATE('$prev_month_end', 'YYYYMMDD'), 'DDMMYYYY') FROM dual;
-EXIT;
-EOF
-)
-
-# Remove leading and trailing whitespace
-prev_month_start_ddmmyyyy=$(echo $prev_month_start_ddmmyyyy | xargs)
-prev_month_end_ddmmyyyy=$(echo $prev_month_end_ddmmyyyy | xargs)
-
-echo "Previous Month Start Date: $prev_month_start_ddmmyyyy"
-echo "Previous Month End Date: $prev_month_end_ddmmyyyy"
+000001******************************************************************
+000020*   (C) COPYRIGHT TATA CONSULTANCY SERVICES                      *
+000030*       ALL RIGHTS RESERVED. NO PART OF THIS PROGRAM MAY         *
+000040*       BE PHOTOCOPIED, REPRODUCED, TRANSLATED TO ANOTHER        *
+000050*       PROGRAM LANGUAGE OR USED IN ANY WAY WITHOUT THE          *
+000060*       PRIOR WRITTEN CONSENT OF TATA CONSULTANCY SERVICES       *
+000070*       OR THE AUTHORISED SELLING AGENT.                         *
+000080*----------------------------------------------------------------*
+000090******************************************************************
+000100***  SYSTEM:-                                                    *
+000110***                                                              *
+000120***  MODULE:-  GL                                                *
+000130***                                                              *
+000140***  PROGRAM:-   ATM001.PCO                                      *
+000150***                                                              *
+000160***  PURPOSE:- EXTRACT UNRECONCILED ATM BGL'S FROM GLOR AND GLRE *
+000170******************************************************************
+000180*                 P R O G R A M    H I S T O R Y                 *
+000190*----------------------------------------------------------------*
+000200* PREM BOKKA : 15052024 : 24020033 : INITIAL VERSION             *
+000210*----------------------------------------------------------------*
+PPPPPP IDENTIFICATION DIVISION.
+PPPPPP*
+PPPPPP PROGRAM-ID. ATM001.
+PPPPPP AUTHOR. TCSL
+PPPPPP*
+PPPPPP* DESC. NEW REPORTS FOR FOREX BGL.
+PPPPPP*
+PPPPPP INSTALLATION. FINANCIAL NETWORK SERVICES PTY LTD.
+PPPPPP*
+PPPPPP DATE-WRITTEN. 17/04/2024.
+PPPPPP DATE-COMPILED. XXXXXXXXXX.
+PPPPPP/
+PPPPPP*
+PPPPPP ENVIRONMENT DIVISION.
+PPPPPP*
+PPPPPP*
+PPPPPP INPUT-OUTPUT SECTION.
+PPPPPP FILE-CONTROL.
+PPPPPP       SELECT BGLFILE  ASSIGN        TO  "BGLFILE"
+PPPPPP              ORGANIZATION IS  LINE SEQUENTIAL
+PPPPPP              ACCESS       IS  SEQUENTIAL
+pppppp              FILE STATUS IS BGL-CARD-STATUS.
+PPPPPP       SELECT BRCHFILE  ASSIGN       TO  "BRCH2FILE"
+PPPPPP              ORGANIZATION IS  LINE SEQUENTIAL
+PPPPPP              ACCESS       IS  SEQUENTIAL
+PPPPPP              FILE STATUS IS BRCH-CARD-STATUS.
+PPPPPP       SELECT OUTFILE   ASSIGN       TO  "OUTFILE"
+PPPPPP              ORGANIZATION IS  LINE SEQUENTIAL
+PPPPPP              ACCESS       IS  SEQUENTIAL
+PPPPPP              FILE STATUS IS WS-FILE-STATUS.
+PPPPPP       SELECT DATERANG ASSIGN        TO  "DATERANG"
+pppppp              ORGANIZATION IS  LINE SEQUENTIAL
+PPPPPP              ACCESS       IS  SEQUENTIAL
+PPPPPP              FILE STATUS IS WS-DATE-STATUS.
+PPPPPP DATA DIVISION.
+PPPPPP*
+PPPPPP FILE SECTION.
+PPPPPP*
+PPPPPP FD BGLFILE.
+PPPPPP 01 BGL-RECORD.
+pppppp    03 FILLER                         PIC X(3).
+PPPPPP    03 BGL-HEAD                       PIC X(11).
+pppppp    03 FILLER                         PIC X(1).
+PPPPPP    03 BGL-HEAD-1                     PIC X(11).
+PPPPPP    03 FILLER                         PIC X(1).
+PPPPPP    03 DEAF-BGL                       PIC X(11).
+PPPPPP    03 FILLER                         PIC X(1).
+pppppp    03 CLAIM-BGL                      PIC X(11).
+PPPPPP    03 FILLER                         PIC X(06).
+PPPPPP*
+PPPPPP FD BRCHFILE.
+PPPPPP 01 BRCH-RECORD.
+PPPPPP    03 FILLER                              PIC X(15).
+PPPPPP    03 FROM-BRCH-CODE                      PIC X(05).
+PPPPPP    03 FILLER                              PIC X(1).
+PPPPPP    03 TO-BRCH-CODE                        PIC X(05).
+pppppp*
+PPPPPP FD OUTFILE.
+PPPPPP 01 OUTPUT-RECORD     PIC X(56).
+PPPPPP*
+PPPPPP FD DATERANG.
+PPPPPP 01 DATE-RANGE.
+PPPPPP    03 FROM-DATE-EXT              PIC 9(5).
+pppppp    03 FILLER                     PIC X(1).
+PPPPPP    03 TO-DATE-EXT                PIC 9(5).
+PPPPPP*
+PPPPPP WORKING-STORAGE SECTION.
+PPPPPP*
+PPPPPP 01 WA-INST-NO      PIC XXX VALUE '003'.
+PPPPPP 01 WS-TEMP-AMT PIC S9(14)V9(3) SIGN TRAILING SEPARATE.
+pppppp 01 WS-F-ACCT.
+PPPPPP   03 WS-F-BGL-HEAD PIC X(11).
+PPPPPP   03 WS-F-BRCH     PIC X(05).
+PPPPPP*
+PPPPPP 01 WS-RECON-TYPE   PIC X(01).
+PPPPPP*
+PPPPPP 01 WS-T-ACCT.
+PPPPPP    03 WS-T-BGL-HEAD PIC X(11).
+PPPPPP    03 WS-T-BRCH     PIC X(05).
+PPPPPP*
+PPPPPP 01 WS-FROM-BIN      PIC 9(09).
+PPPPPP 01 WS-TO-BIN        PIC 9(09).
+PPPPPP 01 WA-F-ACCT PIC X(16).
+PPPPPP 01 WA-T-ACCT PIC X(16).
+PPPPPP*
+PPPPPP 01 WS-REC-1.
+PPPPPP    03 WM-BGL-ACCT-NO     PIC X(16).
+PPPPPP    03 FILLER             PIC X(01) VALUE " ".
+PPPPPP    03 WM-REF-NO          PIC X(20).
+PPPPPP    03 FILLER             PIC X(01) VALUE " ".
+PPPPPP    03 WM-BGL_BAL         PIC S9(14)V9(3) SIGN TRAILING SEPARATE.
+PPPPPP*
+PPPPPP 01 WS-FILE-STATUS                     PIC 99 VALUE ZEROES.
+pppppp 01 WS-DATE-STATUS                     PIC 99 VALUE ZEROES.
+PPPPPP*
+PPPPPP 01 BGL-CARD-STATUS                    PIC 99 VALUE ZEROES.
+pppppp 01 BRCH-CARD-STATUS                   PIC 99 VALUE ZEROES.
+PPPPPP COPY UT1999CA IN LIBRYMIS.
+PPPPPP*
+PPPPPP 01 GLOR-DATA-REC.
+PPPPPP    COPY GLORMAST IN LIBRYGEN.
+PPPPPP 01 GLRE-DATA-REC.
+PPPPPP    COPY GLREMAST IN LIBRYGEN.
+PPPPPP*
+PPPPPP COPY DBIOCALL IN LIBRYMIS.
+PPPPPP*
+PPPPPP 01 WA-UT9010-CALL.
+PPPPPP    COPY UT9010CA IN LIBRYMIS.
+PPPPPP*
+PPPPPP COPY MISERR01 IN LIBRYMIS.
+PPPPPP*
+PPPPPP     EXEC SQL BEGIN DECLARE SECTION END-EXEC.
+PPPPPP*
+PPPPPP      01 WA-RECON-TYPE              PIC X(01).
+PPPPPP      01 WS-ERROR-FLAG              PIC X(01) VALUE "N".
+PPPPPP      01 WS-EOF                     PIC X     VALUE "N".
+PPPPPP      01 WA-FROM-ACC                PIC X(16).
+PPPPPP      01 WA-TO-ACC                  PIC X(16).
+PPPPPP      01 WS-CARD-ERROR              PIC X VALUE "N".
+PPPPPP      01 S-ACCT-NO                  PIC X(16) VALUE SPACES.
+PPPPPP      01 S-REFERENCE-NO             PIC X(20) VALUE SPACES.
+PPPPPP      01 S-BGL-BAL                  PIC S9(14)V999.
+PPPPPP      01 DIF-BGL-BAL                PIC S9(14)V999.
+PPPPPP     EXEC SQL END DECLARE SECTION END-EXEC.
+PPPPPP      EXEC SQL INCLUDE SQLCA END-EXEC.
+PPPPPP
+PPPPPP PROCEDURE DIVISION.
+PPPPPP*
+PPPPPP A100-START-PARA.
+PPPPPP*  INITIALIZE WA-IDX-BGL.
+PPPPPP        PERFORM INITI-PARA THRU INITI-PARA-EXIT.
+PPPPPP        PERFORM X100-DBIO-SIGN-ON  THRU   X199-EXIT.
+PPPPPP          IF WS-ERROR-FLAG = "Y"
+PPPPPP        CLOSE OUTFILE
+PPPPPP           GO TO A199-EXIT
+PPPPPP          END-IF.
+PPPPPP        PERFORM B100-OPEN-FILES  THRU  B109-EXIT.
+PPPPPP        IF WS-ERROR-FLAG = "Y"
+PPPPPP        CLOSE OUTFILE
+PPPPPP           GO TO A199-EXIT
+PPPPPP        END-IF.
+PPPPPP        PERFORM B500-OPEN-EXE-CARD THRU B501-EXIT.
+PPPPPP        IF WS-ERROR-FLAG = "Y"
+PPPPPP        CLOSE OUTFILE
+PPPPPP           GO TO A199-EXIT
+PPPPPP        END-IF.
+PPPPPP        PERFORM B200-OPEN-CARD     THRU B209-EXIT.
+PPPPPP        IF WS-ERROR-FLAG = "Y"
+PPPPPP        CLOSE OUTFILE
+PPPPPP           GO TO A199-EXIT
+RRRRRR        END-IF
+pppppp        PERFORM B400-OPEN-BRNCH-CARD THRU B401-EXIT.
+PPPPPP        IF WS-ERROR-FLAG = "Y"
+PPPPPP        CLOSE OUTFILE
+PPPPPP           GO TO A199-EXIT
+RRRRRR        END-IF
+PPPPPP        PERFORM X200-DBIO-SIGN-OFF    THRU   X299-EXIT.
+PPPPPP A199-EXIT.
+PPPPPP     COPY MISERR02 IN LIBRYMIS.
+PPPPPP     STOP RUN.
+PPPPPP*
+PPPPPP X100-DBIO-SIGN-ON.
+PPPPPP     CALL "DBIO".
+PPPPPP     MOVE  93      TO     DBIO-CALL-FUNC.
+PPPPPP     MOVE  SPACES  TO     DBIO-CALL-STATUS.
+PPPPPP     CALL  "DBIO"  USING  DBIO-CALL-PARAM
+PPPPPP                          DBIO-CALL-SYS-AREA
+PPPPPP                          DBIO-CALL-KEY-AREA
+PPPPPP                          DBIO-CALL-STATUS.
+PPPPPP     IF DBIO-CALL-STATUS = "****"
+PPPPPP        DISPLAY "ATM001:(X100-DBIO-SIGN-ON) GOOD DB SIGNON"
+PPPPPP     ELSE
+PPPPPP        DISPLAY "ATM001:(X100-DBIO-SIGN-ON) ERROR SIGNING DB - "
+PPPPPP        DISPLAY "DBIO-CALL-STATUS - " DBIO-CALL-STATUS
+PPPPPP        MOVE "Y" TO WS-ERROR-FLAG
+PPPPPP     END-IF.
+PPPPPP X199-EXIT.
+PPPPPP     EXIT.
+PPPPPP*
+PPPPPP*
+PPPPPP B500-OPEN-EXE-CARD.
+PPPPPP     OPEN INPUT DATERANG
+PPPPPP      INITIALIZE WS-CARD-ERROR
+PPPPPP      IF WS-DATE-STATUS = "00"
+PPPPPP        PERFORM B500-READ-EXE-CARD THRU B502-EXIT
+PPPPPP         UNTIL WS-CARD-ERROR = "Y"
+PPPPPP         CLOSE DATERANG
+PPPPPP       ELSE
+PPPPPP        DISPLAY "ATM001:(B500-OPEN-EXE-CARD)CARD FILE ERROR"
+RRRRRR        MOVE "Y" TO WS-ERROR-FLAG
+PPPPPP        GO TO B501-EXIT
+PPPPPP       END-IF.
+PPPPPP B501-EXIT.
+PPPPPP    EXIT.
+PPPPPP B500-READ-EXE-CARD.
+PPPPPP   READ DATERANG
+PPPPPP    AT END
+PPPPPP      MOVE "Y" TO WS-CARD-ERROR
+PPPPPP    NOT AT END
+PPPPPP   IF WS-CARD-ERROR = "Y"
+PPPPPP       GO TO B502-EXIT
+PPPPPP    ELSE
+PPPPPP      INITIALIZE
+PPPPPP                 WS-FROM-BIN
+PPPPPP                 WS-TO-BIN
+PPPPPP      MOVE FROM-DATE-EXT TO WS-FROM-BIN
+PPPPPP      MOVE TO-DATE-EXT   TO WS-TO-BIN
+PPPPPP        IF WS-ERROR-FLAG = "Y"
+PPPPPP           MOVE "Y" TO WS-CARD-ERROR
+PPPPPP           GO TO B502-EXIT
+PPPPPP         END-IF
+PPPPPP     END-IF
+PPPPPP   END-READ.
+PPPPPP B502-EXIT.
+PPPPPP     EXIT.
+PPPPPP*
+PPPPPP B100-OPEN-FILES.
+PPPPPP     OPEN OUTPUT  OUTFILE
+PPPPPP     IF WS-FILE-STATUS NOT = "00"
+PPPPPP        DISPLAY "ATM001:(B100-OPEN-FILES) OPEN ERROR.."
+PPPPPP                                           WS-FILE-STATUS
+PPPPPP         MOVE "Y" TO WS-ERROR-FLAG
+PPPPPP        GO TO B109-EXIT
+PPPPPP     END-IF.
+PPPPPP B109-EXIT.
+PPPPPP     EXIT.
+PPPPPP B400-OPEN-BRNCH-CARD.
+PPPPPP    OPEN INPUT BRCHFILE
+pppppp      INITIALIZE WS-CARD-ERROR
+PPPPPP      IF BRCH-CARD-STATUS = "00"
+PPPPPP        PERFORM B400-READ-BRCH-CARD THRU B409-EXIT
+PPPPPP         UNTIL WS-CARD-ERROR = "Y"
+PPPPPP         CLOSE BRCHFILE
+PPPPPP       ELSE
+PPPPPP       DISPLAY "ATM001:(B400-OPEN-BRNCH-CARD) CARDFILE IS MISSING"
+RRRRRR        MOVE "Y" TO WS-ERROR-FLAG
+PPPPPP      END-IF.
+PPPPPP B401-EXIT.
+PPPPPP     EXIT.
+PPPPPP B400-READ-BRCH-CARD.
+PPPPPP     READ BRCHFILE
+PPPPPP     AT END
+PPPPPP         MOVE "Y" TO WS-CARD-ERROR
+PPPPPP     NOT AT END
+PPPPPP     IF WS-CARD-ERROR = "Y"
+PPPPPP       GO TO B409-EXIT
+PPPPPP     ELSE
+PPPPPP      INITIALIZE WS-F-BRCH
+PPPPPP                 WS-T-BRCH
+PPPPPP                 WA-F-ACCT
+PPPPPP                 WA-T-ACCT
+PPPPPP                 WA-FROM-ACC
+PPPPPP                 WA-TO-ACC
+PPPPPP      MOVE FROM-BRCH-CODE TO WS-F-BRCH
+PPPPPP      MOVE TO-BRCH-CODE TO WS-T-BRCH
+PPPPPP      MOVE WS-F-ACCT TO WA-F-ACCT
+PPPPPP      MOVE WS-T-ACCT TO WA-T-ACCT
+PPPPPP      MOVE WA-F-ACCT TO WA-FROM-ACC
+PPPPPP      MOVE WA-T-ACCT TO WA-TO-ACC
+PPPPPP      PERFORM A000-READ-GLOR THRU A099-GLOR-EXIT
+PPPPPP     END-READ.
+PPPPPP B409-EXIT.
+PPPPPP     EXIT.
+PPPPPP*
+PPPPPP B200-OPEN-CARD.
+PPPPPP    OPEN INPUT BGLFILE.
+PPPPPP      IF BGL-CARD-STATUS = "00"
+pppppp        INITIALIZE WS-CARD-ERROR
+PPPPPP        PERFORM B300-READ-BGL-CARD THRU B309-EXIT
+PPPPPP         UNTIL WS-CARD-ERROR = "Y"
+PPPPPP        CLOSE BGLFILE
+PPPPPP      ELSE
+PPPPPP         DISPLAY "ATM001:(B200-OPEN-CARD) CARDFILE ERROR"
+PPPPPP        MOVE "Y" TO WS-ERROR-FLAG
+PPPPPP      END-IF.
+PPPPPP B209-EXIT.
+PPPPPP     EXIT.
+PPPPPP*
+PPPPPP B300-READ-BGL-CARD.
+PPPPPP     READ BGLFILE
+PPPPPP     AT END
+PPPPPP          MOVE "Y" TO WS-CARD-ERROR
+PPPPPP     NOT AT END
+PPPPPP     IF WS-CARD-ERROR = "Y"
+PPPPPP        GO TO B309-EXIT
+PPPPPP     ELSE
+PPPPPP        INITIALIZE WS-F-BGL-HEAD
+PPPPPP                   WS-T-BGL-HEAD
+PPPPPP        MOVE BGL-HEAD TO WS-F-BGL-HEAD
+PPPPPP                         WS-T-BGL-HEAD
+PPPPPP        IF WS-ERROR-FLAG = "Y"
+PPPPPP           MOVE "Y" TO WS-CARD-ERROR
+PPPPPP           GO TO B309-EXIT
+PPPPPP        END-IF
+PPPPPP     END-IF
+PPPPPP     END-READ.
+PPPPPP B309-EXIT.
+PPPPPP     EXIT.
+PPPPPP*
+PPPPPP A000-READ-GLOR.
+PPPPPP*
+PPPPPP     EXEC SQL DECLARE GETGLOR CURSOR FOR
+PPPPPP       SELECT /*+ INDEX (GLOR GLORUK_01) */
+PPPPPP                 GL_ACCT_NO,
+PPPPPP                 REFERENCE_NO,
+PPPPPP                 AMOUNT,
+PPPPPP                 RECON_TYPE
+PPPPPP         FROM GLOR
+pppppp     WHERE INST =:WA-INST-NO AND
+pppppp          GL_ACCT_NO >=:WA-FROM-ACC
+PPPPPP         AND GL_ACCT_NO <=:WA-TO-ACC
+PPPPPP               AND POSTING_DATE >=:WS-FROM-BIN
+PPPPPP             AND POSTING_DATE <=:WS-TO-BIN
+PPPPPP     END-EXEC.
+PPPPPP      EXEC SQL OPEN GETGLOR END-EXEC.
+PPPPPP      IF SQLCODE = 1403
+PPPPPP          CONTINUE
+PPPPPP      ELSE IF SQLCODE = 0
+PPPPPP          PERFORM A100-FETCH-GLOR THRU A199-FETCH-GLOR-EXIT
+PPPPPP      ELSE
+PPPPPP            DISPLAY "OPEN GETGLOR CURSOR SQLCODE" SQLCODE
+PPPPPP         CALL "ABORT"
+PPPPPP      END-IF
+RRRRRR     END-IF.
+PPPPPP A099-GLOR-EXIT.
+PPPPPP   EXIT.
+PPPPPP*
+PPPPPP A100-READ-GLRE.
+PPPPPP     EXEC SQL DECLARE GETGLRESUM CURSOR FOR
+PPPPPP         SELECT /*+ INDEX (GLRE GLREUK_01) */
+PPPPPP                AMOUNT FROM GLRE
+PPPPPP          WHERE INST =:WA-INST-NO AND
+PPPPPP         GL_ACCT_NO =:S-ACCT-NO AND
+PPPPPP         REFERENCE_NO =:S-REFERENCE-NO
+PPPPPP     END-EXEC.
+PPPPPP      EXEC SQL OPEN GETGLRESUM END-EXEC.
+PPPPPP      IF SQLCODE = 0
+000000          INITIALIZE WS-TEMP-AMT
+000000          MOVE S-BGL-BAL TO WS-TEMP-AMT
+PPPPPP          PERFORM A100-FETCH-GLRE THRU A100-FETCH-GLRE-EXIT
+000000                                           UNTIL SQLCODE NOT = 0
+PPPPPP      ELSE
+PPPPPP            DISPLAY "OPEN GETGLOR CURSOR SQLCODE" SQLCODE
+PPPPPP         CALL "ABORT"
+PPPPPP      END-IF.
+PPPPPP A100-GLRE-EXIT.
+PPPPPP      EXIT.
+PPPPPP*
+PPPPPP A100-FETCH-GLRE.
+PPPPPP         EXEC SQL FETCH GETGLRESUM INTO
+PPPPPP               :DIF-BGL-BAL
+PPPPPP         END-EXEC.
+000000     EVALUATE SQLCODE
+000000     WHEN 0
+000000         COMPUTE WS-TEMP-AMT = WS-TEMP-AMT - DIF-BGL-BAL
+PPPPPP     WHEN 1403
+PPPPPP        IF S-BGL-BAL NOT = 0
+PPPPPP         MOVE WS-TEMP-AMT        TO WM-BGL_BAL
+000000         MOVE S-ACCT-NO          TO WM-BGL-ACCT-NO
+PPPPPP         MOVE S-REFERENCE-NO     TO WM-REF-NO
+PPPPPP         WRITE OUTPUT-RECORD FROM WS-REC-1
+PPPPPP         INITIALIZE WS-REC-1
+PPPPPP                   OUTPUT-RECORD
+PPPPPP        END-IF
+PPPPPP          GO TO A100-FETCH-GLOR
+PPPPPP     WHEN OTHER
+PPPPPP          DISPLAY "ATM001:(A100-FETCH-GLRE) ERROR IN "
+PPPPPP                   " GLOR FETCHING" WA-T-ACCT
+PPPPPP          GO TO A199-FETCH-GLOR-EXIT
+PPPPPP     END-EVALUATE.
+PPPPPP A100-FETCH-GLRE-EXIT.
+PPPPPP     EXIT.
+PPPPPP A100-FETCH-GLOR.
+PPPPPP     EXEC SQL FETCH GETGLOR INTO
+PPPPPP           :S-ACCT-NO,
+PPPPPP           :S-REFERENCE-NO,
+PPPPPP           :S-BGL-BAL,
+PPPPPP           :WA-RECON-TYPE
+PPPPPP     END-EXEC.
+PPPPPP     IF SQLCODE = ZEROS
+PPPPPP           IF WA-RECON-TYPE = '1'
+PPPPPP             IF S-BGL-BAL NOT = 0
+PPPPPP              MOVE S-ACCT-NO          TO WM-BGL-ACCT-NO
+PPPPPP              MOVE S-BGL-BAL          TO WM-BGL_BAL
+PPPPPP              MOVE S-REFERENCE-NO     TO WM-REF-NO
+PPPPPP          WRITE OUTPUT-RECORD FROM WS-REC-1
+PPPPPP          INITIALIZE WS-REC-1
+PPPPPP                     OUTPUT-RECORD
+PPPPPP             END-IF
+PPPPPP          GO TO A100-FETCH-GLOR
+PPPPPP          ELSE IF WA-RECON-TYPE = '2'
+PPPPPP             PERFORM A100-READ-GLRE THRU A100-GLRE-EXIT
+PPPPPP          GO TO A100-FETCH-GLOR
+PPPPPP         END-IF
+PPPPPP     END-IF.
+PPPPPP     IF SQLCODE = 1403
+PPPPPP          DISPLAY "ATM001:(A100-FETCH-GLOR) LAST RECORD FROM"
+PPPPPP                   "GLOR IS FETCHED" WA-T-ACCT
+PPPPPP          GO TO A199-FETCH-GLOR-EXIT
+PPPPPP     ELSE
+PPPPPP         IF SQLCODE NOT = 0
+PPPPPP          DISPLAY "ATM001:(A100-FETCH-GLOR) ERROR IN "
+PPPPPP                   " GLOR FETCHING" WA-T-ACCT
+PPPPPP          GO TO A199-FETCH-GLOR-EXIT
+PPPPPP         END-IF
+PPPPPP     END-IF.
+PPPPPP A199-FETCH-GLOR-EXIT.
+PPPPPP     EXIT.
+PPPPPP*
+PPPPPP X200-DBIO-SIGN-OFF.
+PPPPPP     MOVE  91         TO      DBIO-CALL-FUNC.
+PPPPPP     CALL  "DBIO"     USING   DBIO-CALL-PARAM
+PPPPPP                              DBIO-CALL-SYS-AREA
+PPPPPP                              DBIO-CALL-KEY-AREA
+PPPPPP                              DBIO-CALL-STATUS.
+PPPPPP     IF DBIO-CALL-STATUS = "****"
+PPPPPP         DISPLAY "ATM001:(X200-DBIO-SIGN-OFF) GOOD DB SIGNOFF"
+PPPPPP     ELSE
+PPPPPP         DISPLAY "ATM001:(X200-DBIO-SIGN-OFF) BAD DB SIGNOFF - "
+PPPPPP                 DBIO-CALL-STATUS
+PPPPPP     END-IF.
+PPPPPP X299-EXIT.
+PPPPPP     EXIT.
+pppppp INITI-PARA.
+pppppp      INITIALIZE WS-RECON-TYPE
+pppppp                 DIF-BGL-BAL
+pppppp                 S-BGL-BAL
+pppppp                 WS-REC-1
+pppppp                 WA-RECON-TYPE.
+pppppp INITI-PARA-EXIT.
+ppppp    EXIT.
