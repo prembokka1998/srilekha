@@ -1,493 +1,242 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>birthday</title>
-    <style>
-    @import url(https://fonts.googleapis.com/css?family=Allan:700,400);
- body, html {
-	 width: 100%;
-	 height: 100%;
-}
- body {
-	 margin: 0;
-	 background-color: mistyrose;
-	 position: relative;
-	 perspective: 800px;
-	 overflow: hidden;
-}
- .envelope {
-	 z-index: 2;
-	 position: absolute;
-	 width: 550px;
-	 height: 366.66667px;
-	 top: 50%;
-	 left: 50%;
-	 margin-top: -183.33333px;
-	 margin-left: -275px;
-	 transform-style: preserve-3d;
-	 transform-origin: right center;
-	 transition: transform 1s ease;
-	 font-family: "Allan", sans-serif;
-	 color: #1f1f1f;
-}
- .envelope .front, .envelope .back {
-	 position: absolute;
-	 width: 100%;
-	 height: 100%;
-	 background-color: #fff;
-	 border-radius: 5px;
-	 box-shadow: 0 0 30px -5px #fbc0b9 eb;
-}
- .envelope .front {
-	 backface-visibility: hidden;
-	 cursor: pointer;
-	 display: table;
-}
- .envelope .front:focus {
-	 outline: none;
-}
- .envelope .front .stamp {
-	 transform: translate3d(0, 0, 1px);
-	 position: absolute;
-	 width: 80px;
-	 height: 80px;
-	 right: 10px;
-	 top: 10px;
-	 padding: 10px;
-	 background: radial-gradient(rgba(0, 0, 0, 0) 0px, rgba(0, 0, 0, 0) 4px, #f6f6df 4px, #f6f6df);
-	 background-size: 20px 20px;
-	 background-position: -10px -10px;
-}
- .envelope .front .stamp:after {
-	 content: "";
-	 display: block;
-	 width: 100%;
-	 height: 100%;
-	 background-color: #fff;
-	 border-radius: 2px;
-}
- .envelope .front .mail {
-	 text-align: center;
-	 display: table-cell;
-	 vertical-align: middle;
-}
- .envelope .front .mail p {
-	 font-weight: bold;
-	 margin: 0;
-}
- .envelope .back .letter p {
-	 font-size: 30px;
-	 line-height: 20px;
-	 letter-spacing: 2px;
-	 color: #ff969f;
-}
- .envelope .front .mail p:first-child {
-	 font-size: 50px;
-	 line-height: 50px;
-	 color: #ff969f;
-}
- .envelope .front .mail p:last-child {
-	 font-size: 30px;
-}
- .envelope .back .letter p:nth-child(2) {
-	 font-size: 30px;
-	 color: black;
-}
- .envelope .back .letter p:nth-child(3) {
-	 font-size: 30px;
-	 color: #f57882;
-	 margin-top: 150px;
-	 float: right;
-}
- .envelope .back {
-	 transform: rotateY(180deg) translate3d(0, 0, 1px);
-}
- .envelope .back .flip {
-	 position: absolute;
-	 width: 100%;
-	 height: 100%;
-	 overflow: hidden;
-}
- .envelope .back .flip:before {
-	 content: "";
-	 position: absolute;
-	 background-color: #fff;
-	 box-shadow: 0px 0px 100px #f5c1bc 52;
-}
- .envelope .back .top-flip:before, .envelope .back .bottom-flip:before {
-	 width: 388.90873px;
-	 height: 388.90873px;
-}
- .envelope .back .top-flip {
-	 z-index: 5;
-	 transform-origin: top center;
-}
- .envelope .back .top-flip:before {
-	 transform-origin: top left;
-	 transform: rotate(-45deg);
-	 border-bottom-left-radius: 50px;
-	 border-top-left-radius: 10px;
-	 border-bottom-right-radius: 10px;
-}
- .envelope .back .bottom-flip {
-	 z-index: 4;
-}
- .envelope .back .bottom-flip:before {
-	 transform-origin: left bottom;
-	 transform: rotate(45deg) translate(-15px, -15px);
-	 border-top-left-radius: 100px;
-	 border-bottom-left-radius: 10px;
-	 border-top-right-radius: 10px;
-}
- .envelope .back .left-flip:before, .envelope .back .right-flip:before {
-	 width: 269.27249px;
-	 height: 269.27249px;
-	 top: -5px;
-}
- .envelope .back .left-flip {
-	 z-index: 3;
-}
- .envelope .back .left-flip:before {
-	 transform-origin: top left;
-	 transform: rotate(45deg);
-	 border-top-left-radius: 20px;
-	 border-bottom-right-radius: 30px;
-	 border-top-right-radius: 5px;
-}
- .envelope .back .right-flip {
-	 z-index: 2;
-}
- .envelope .back .right-flip:before {
-	 right: 0;
-	 transform-origin: top right;
-	 transform: rotate(-45deg);
-	 border-top-right-radius: 20px;
-	 border-bottom-left-radius: 30px;
-	 border-top-left-radius: 5px;
-}
- .envelope .back .letter {
-	 z-index: 1;
-	 position: absolute;
-	 top: 5px;
-	 left: 10px;
-	 width: 530px;
-	 height: 346.66667px;
-	 background-color: #fff;
-	 border-radius: 5px;
-	 padding: 0 30px;
-	 box-sizing: border-box;
-	 box-shadow: 0px 1px 100px #fbc0b9 eb;
-}
- .envelope .back .letter div {
-	 position: relative;
-	 margin-top: 25px;
-}
- .envelope .back .letter label {
-	 position: absolute;
-	 font-size: 16px;
-	 line-height: 20px;
-	 opacity: 0;
-	 top: -15px;
-	 transition: all 0.1s linear;
-	 color: #adadad;
-}
- .envelope .back .letter label.show {
-	 opacity: 1;
-	 top: -18px;
-}
- .envelope .back .letter label.focus {
-	 color: inherit;
-}
- .envelope .back .letter ::placeholder {
-	 color: #adadad;
-}
- .envelope .back .letter input[type='text'], .envelope .back .letter textarea {
-	 border: none;
-	 box-sizing: border-box;
-	 width: 100%;
-	 padding: 5px;
-	 margin: 0;
-	 background-color: #f6f6df;
-}
- .envelope .back .letter input:focus, .envelope .back .letter textarea:focus {
-	 outline: none;
-}
- .envelope .back .letter input, .envelope .back .letter textarea {
-	 font-family: "Allan", sans-serif;
-	 font-size: 20px;
-}
- .envelope .back .letter input[type='text'] {
-	 height: 33px;
-}
- .envelope .back .letter input[type='submit'] {
-	 font-weight: bold;
-	 cursor: pointer;
-	 border: none;
-	 border-radius: 2px;
-	 padding: 5px 20px;
-	 background-color: #e7e1bc;
-	 margin: 0;
-	 transition: all 0.1s linear;
-}
- .envelope .back .letter input[type='submit']:hover {
-	 background-color: #dcd0aa;
-}
- .envelope .back .letter textarea {
-	 resize: none;
-	 height: 117.66667px;
-}
- .envelope.new {
-	 animation: new 1s forwards;
-}
- .envelope.open {
-	 animation: open 3s forwards;
-}
- .envelope.open .top-flip {
-	 animation: flip-open 1s 1s forwards;
-}
- .envelope.open .letter {
-	 animation: letter-out 1s 2s forwards;
-}
- .envelope.send {
-	 animation: send 4s forwards;
-}
- .envelope.send .top-flip {
-	 transform: rotateX(-180deg);
-	 z-index: -1;
-	 animation: flip-close 1s 1s forwards;
-}
- .envelope.send .letter {
-	 animation: letter-in 1s forwards;
-}
- @keyframes new {
-	 0% {
-		 left: 0%;
-		 margin-left: -550px;
-	}
-	 100% {
-		 left: 50%;
-		 margin-left: -275px;
-	}
-}
- @keyframes open {
-	 0% {
-		 transform: translate3d(0, 0, 0) rotateY(0);
-	}
-	 33.333% {
-		 transform: translate3d(-100%, 0, 0) rotateY(-180deg);
-	}
-	 66.666% {
-		 transform: translate3d(-100%, 0, 0) rotateY(-180deg);
-	}
-	 100% {
-		 transform: translate3d(-100%, 733.33333px, 0) rotateY(-180deg);
-	}
-}
- @keyframes flip-open {
-	 0% {
-		 transform: rotateX(0deg);
-		 z-index: 5;
-	}
-	 50% {
-		 transform: rotateX(0deg);
-		 z-index: 5;
-	}
-	 100% {
-		 transform: rotateX(-180deg);
-		 z-index: -1;
-	}
-}
- @keyframes letter-out {
-	 0% {
-		 transform: translate3d(0, 0, 0);
-		 box-shadow: 0 0px 30px -5px #fbc0b9 eb;
-	}
-	 100% {
-		 transform: translate3d(0, -733.33333px, 0);
-		 box-shadow: 0 0px 30px -5px #fbc0b9 eb;
-	}
-}
- @keyframes send {
-	 0% {
-		 transform: translate3d(-100%, 733.33333px, 0) rotateY(-180deg);
-		 left: 50%;
-		 margin-left: -275px;
-	}
-	 25% {
-		 transform: translate3d(-100%, 0, 0) rotateY(-180deg);
-		 left: 50%;
-		 margin-left: -275px;
-	}
-	 50% {
-		 transform: translate3d(-100%, 0, 0) rotateY(-180deg);
-		 left: 50%;
-		 margin-left: -275px;
-	}
-	 75% {
-		 transform: translate3d(0, 0, 0) rotateY(0deg);
-		 left: 50%;
-		 margin-left: -275px;
-	}
-	 100% {
-		 transform: translate3d(0, 0, 0) rotateY(0deg);
-		 left: 100%;
-		 margin-left: 20px;
-	}
-}
- @keyframes flip-close {
-	 0% {
-		 transform: rotateX(-180deg);
-		 z-index: -1;
-	}
-	 50% {
-		 transform: rotateX(0deg);
-		 z-index: 5;
-	}
-	 100% {
-		 transform: rotateX(0deg);
-		 z-index: 5;
-	}
-}
- @keyframes letter-in {
-	 0% {
-		 transform: translate3d(0, -733.33333px, 0);
-		 box-shadow: inset 0 0px 30px -5px #a87e50, 0 0 20px -5px;
-	}
-	 100% {
-		 transform: translate3d(0, 0, 0);
-		 box-shadow: inset 0 0px 30px -5px #b08c5b, 0 0 10px -5px;
-	}
-}
- .cake {
-	 position: absolute;
-	 top: 0;
-	 right: 0;
-	 bottom: 0;
-	 left: 0;
-	 margin: auto;
-	 width: 200px;
-	 height: 40px;
-	 background: #745a4a;
-	 border-radius: 100%;
-	 box-shadow: 0px 4px 0px #6b5344, 0px 8px 0px #6b5344, 0px 12px 0px #6b5344, 0px 16px 0px #6b5344, 0px 20px 0px #6b5344, 0px 24px 0px #6b5344, 0px 28px 0px #6b5344, 0px 32px 0px #2fabde, 0px 36px 0px #2fabde, 0px 40px 0px #f8ecc9, 0px 44px 0px #f8ecc9, 0px 48px 0px #f8ecc9, 0px 52px 0px #f8ecc9, 0px 56px 0px #6b5344, 0px 60px 0px #6b5344, 0px 64px 0px #6b5344, 0px 68px 0px #6b5344, 0px 72px 0px #6b5344, 0px 76px 0px #6b5344, 0px 80px 0px #6b5344;
-}
- .cake:before {
-	 position: absolute;
-	 right: 0;
-	 top: 79px;
-	 left: -25px;
-	 margin: auto;
-	 content: "";
-	 width: 250px;
-	 height: 50px;
-	 border-radius: 100%;
-	 background: #fff;
-	 box-shadow: 0px 6px 0px rgba(0, 0, 0, .1);
-	 z-index: -1;
-}
- .candle {
-	 background: #fff;
-	 border-top-left-radius: 40%;
-	 border-top-right-radius: 40%;
-	 position: absolute;
-	 bottom: 70%;
-	 left: 50%;
-	 margin-left: -2.5px;
-	 margin-top: -8.3333333333px;
-	 width: 10px;
-	 height: 50px;
-}
- .candle:after, .candle:before {
-	 background: rgba(255, 0, 0, 0.4);
-	 content: "";
-	 position: absolute;
-	 width: 100%;
-	 height: 5px;
-}
- .candle:after {
-	 top: 25%;
-	 left: 0;
-}
- .candle:before {
-	 top: 45%;
-	 left: 0;
-}
- .fire {
-	 border-radius: 100%;
-	 box-shadow: 0 0 40px 10px rgba(248, 233, 209, 0.2);
-	 position: absolute;
-	 top: -12px;
-	 left: 50%;
-	 margin-left: -3.3333333333px;
-	 width: 6.6666666667px;
-	 height: 20.5px;
-	 animation: fire 2s infinite;
-}
- @keyframes fire {
-	 0% {
-		 background: #fbf33f;
-		 background: radial-gradient(circle, rgba(251, 243, 63, 1) 0%, rgba(252, 177, 70, 1) 100%);
-		 transform: translateY(0) scale(1);
-	}
-	 50% {
-		 transform: translateY(-20px) scale(0);
-		 background: #fbf33f;
-		 background: radial-gradient(circle, rgba(251, 243, 63, 1) 0%, rgba(252, 177, 70, 1) 100%);
-	}
-	 100% {
-		 background: #fbf33f;
-		 background: radial-gradient(circle, rgba(251, 243, 63, 1) 0%, rgba(252, 177, 70, 1) 100%);
-		 transform: translateY(0) scale(1);
-	}
-}
- 
-    </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script> 
-    $(function(){
+#!/bin/ksh
+#########################################################
+#   CR NO: 24020033
+#
+#   SCRIPT NAME : atmdeafms
+#
+#   PURPOSE : EXTRACT UNRECONCILED ATM BGL'S FROM GLOR AND GLRE
+#
+#   DEVELOPER: PREM BOKKA
+#########################################################
+pgm=`basename $0`
+export program=ATM001
+summary_file=$program.summary.$BANCS_HOSTNO.out
+export summary_file=$summary_file
+MScard=$card/ATM001MS.card
+EXE_DATE=`cat $card/ATMDEAF.card | awk '{print $1}'`
+TODAY_DATE=`cat $data/file/MFLAGS | cut -c15-16`
+region_date=`cut -c 15-16 $data/file/MFLAGS``cut -c 13-14 $data/file/MFLAGS``cut -c 09-12 $data/file/MFLAGS`
+rm -f $spool/ATM_DEAF_${region_date}.txt
+rm -f $spool/ATM_DEAF_???.txt
+rm -f $spool/EXECUTION_DATE.card
+if [ $EXE_DATE -eq $TODAY_DATE ];then
+#############################leap year calculation##################################
+EXE_DATE=`cat $card/ATMDEAF.card | awk '{print $1}'`
+curr_date=`cut -c 09-12 $data/file/MFLAGS``cut -c 13-14 $data/file/MFLAGS``cut -c 15-16 $data/file/MFLAGS`
+cur_bin=`sqlplus -s / <<EOF
+                    set veri off
+                    select to_char(to_date(${curr_date},'YYYYMMDD'),'J')-2415020 "BINARY DATE" from dual;
+                    exit;
+                    EOF`
+cur_bin=`echo $cur_bin | cut -c 25-29`
+m_end_bin=`expr $cur_bin - $EXE_DATE`
+m_end_g=`sqlplus -s / <<EOF
+                      set veri off
+                      select to_char(to_date(sum(2415020+${m_end_bin}),'J'),'YYYYMMDD') YYYYMMDD from dual;
+                      exit;
+                      EOF`
+m_end_g=`echo $m_end_g | cut -c 19-22`
+spn=10
+startYear_g=`expr $m_end_g - $spn`
+is_leap_year() {
+         year=$1
+         if (( (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0) ));then
+         return 0
+         else
+         return 1
+         fi
+              }
+total_days=0
+curr_year=`expr $startYear_g + 1`
+while [ $curr_year -le $m_end_g ]
+ do
+  if is_leap_year $curr_year; then
+  total_days=$((total_days + 366))
+  else
+  total_days=$((total_days + 365))
+  fi
+ curr_year=$((curr_year + 1))
+ done
+ s_end_b=`expr $m_end_bin - $total_days`
+ touch $spool/EXECUTION_DATE.card
+ chmod 755 $spool/EXECUTION_DATE.card
+ echo $s_end_b $m_end_bin >> $spool/EXECUTION_DATE.card
+##########################################################################################
+if [ ! -s ${MScard} ];then
+   echo " ERROR ... ${MScard} NOT FOUND ! " > $sysout/$summary_file 2>&1
+   if [ $AUTOSYS_MODE = Y ];then
+        echo "[`date|awk '{print $2\" \"$3\" \"$4}'`] CANNOT FIND MULTI STREAM CARD ${MScard} " >> $sysout/zerobyte.log
+        checksts.sh GLATMEXT 4
+        exit 1
+   fi
+   echo "ABORTING PROCESS...FOR ${MScard}"
+   checksts.sh GLATMEXT 4
+   exit 13
+fi
 
-        if (!$('.envelope').hasClass('open')){
-          $('.envelope').click(function(){
-            $(this).removeClass('new').addClass('open');
-          });
-        }
-        
-      });
-      </script>
-</head>
-<body>
-    
-    <div class="envelope new">
-        <div class="front">
-          <div class="mail">
-            <p>Happy Birthday Dear sandhya</p>
-           <p>Click me</p>
-            
-          </div>
-        </div>
-        <div class="back">
-			
-          <div class="letter">
-                  <p>I hope your day is as amazing and fun</p><p>Stay strong Be Happy... </p>
-                      <p>Happy birthday sandhya</p>
+if [ ! -s $spool/BRCHATMDEAF.card  ];then
+   echo " ERROR ... BRCHATMDEAF.card NOT FOUND ! " > $sysout/$summary_file 2>&1
+   if [ $AUTOSYS_MODE = Y ];then
+        echo "[`date|awk '{print $2\" \"$3\" \"$4}'`] CANNOT FIND BRCHATMDEAF.card " >> $sysout/zerobyte.log
+        checksts.sh GLATMEXT 4
+        exit 1
+   fi
+   echo "ABORTING PROCESS...FOR ${spool}/BRCHATMDEAF.card"
+   checksts.sh GLATMEXT 4
+   exit 13
+fi
 
-          <div class="box">
-              <div class="cake">
-                  <div class="candle">
-                      <div class="fire"></div>
-                  </div>
-              </div>
-          </div>
-          </div>
-          <div class="flip left-flip"></div>
-          <div class="flip right-flip"></div>
-          <div class="flip bottom-flip"></div>
-          <div class="flip top-flip"></div>
-        </div>
-      </div>
+if grep  '^Y' ${MScard} >/dev/null;then
+   ms_flag=Y
+   echo "MULTI-STREAM = Y"
+###### Dividing Account card file in streams #####
+   no_streams=0
+   line_count=0
+   no_acct=0
+   ATM001card=$spool/BRCHATMDEAF.card
+   no_streams=`grep '^Y' ${MScard} |awk '{print $2}'`
+   echo "Streams " $no_streams
+   line_count=`wc -l ${ATM001card} |awk '{print $1}'`
+   no_acct=` expr $line_count / $no_streams `
+   no_acct=` expr $no_acct + 1 `
+   echo 'Generating Multiple Streams'
+   trans=1
+   typeset -Z3 trans
+   und=_
+   zero=0
+   j=1
+   l=0
+   while [ $trans -le $no_streams ]
+   do
 
-</body>
-</html>
+######  Generation of Card files ########
+      l=` expr $l + $no_acct `
+      sed -n "${j},${l}p" $ATM001card > $spool/BRCHATMDEAF$und$trans.card
+      j=` expr $j + $no_acct `
+      chmod 755 $spool/BRCHATMDEAF$und$trans.card
+      trans=` expr $trans + 1 `
+   done
+else
+   echo
+   echo "MULTI-STREAM = N"
+   ms_flag=N
+fi
+
+CATatmdeaf=$cat/atmdeaf
+cd $cat
+if [ ! -s ${CATatmdeaf} ];then
+   echo " ${CATatmdeaf}  NOT FOUND "
+   if [ $AUTOSYS_MODE = Y ]
+      then
+      echo "[`date|awk '{print $2\" \"$3\" \"$4}'`] CANNOT FIND CAT JOB ${CATatmdeaf} " >> $sysout/zerobyte.log
+      checksts.sh GLATMEXT 4
+      exit 1
+   fi
+   checksts.sh GLATMEXT 4
+   exit 13
+fi
+run_mode=' -s'
+jobname=atmdeaf
+export MULTISTREAM_ATM001="N"
+dd=`cut -c 15-16 $data/file/MFLAGS`
+mm=`cut -c 13-14 $data/file/MFLAGS`
+yy=`cut -c 9-12 $data/file/MFLAGS`
+und="-"
+today_date_ccyymmdd=$dd$und$mm$und$yy
+echo > $sysout/$summary_file
+
+if [ $ms_flag = "Y" ];then
+   stream_no=`grep '^Y' $MScard|awk  '{print $2 }'`
+   echo "RUNNING ATM001 IN MULTISTREAM MODE "
+   export MULTISTREAM_ATM001="Y"
+   trans=1
+   typeset -Z3 trans
+   und=_
+   zero=0
+   while [ $trans -le $stream_no ]
+   do
+      export stream=$program$und$trans
+      echo "Starting Stream : " $stream
+      export outfile=$stream.$BANCS_HOSTNO.out
+      $jobname$und$trans$run_mode  2>&1 &
+      sleep 2
+      trans=`expr $trans + 1`
+   done
+
+######All Streams have been submitted and monitor them
+   while :
+   do
+
+   stream_running=`ps -fu $LOGNAME|grep 'rtsora ATM001'|grep -v grep|wc -l`
+
+   if [ $stream_running -ne "0" ];then
+      echo "RUNNING " $stream_running " STREAM(S) OF ATM001....."
+      sleep 30
+   else
+      echo "COMPLETED ATM001.... SUMMARY IS AS FOLLOWS"
+      break;
+   fi
+   done
+
+####### All the streams have completed processing, provide a summary
+   echo "  STREAM NO      START TIME       END TIME     RETURN CODE "
+   error=0
+   for replica_name in `grep -e '... Start of  ATM001' $sysout/$summary_file|tr -s " "|cut -d' ' -f4`
+   do
+     stream_name=`grep -e '... Start of  '$replica_name $sysout/$summary_file \
+                    |awk '{print $4}'`
+     start_time=`grep -e '... Start of  '$replica_name $sysout/$summary_file \
+                    |awk '{print $9}'`
+     echo $replica_name|awk '{print $2}'
+
+####### Get end time of the replica ################
+     end_stat=`grep -e '... End   of  '$stream_name $sysout/$summary_file \
+               |awk '{print $9,$15}'`
+     end_time=`echo $end_stat|awk '{print $1}'`
+     exit_cde=`echo $end_stat|awk '{print $2}'`
+
+####### Display Statistics #############
+     echo '  '$stream_name'      '$start_time'        '$end_time'        '$exit_cde
+     if [ $exit_cde -ne "0" ];then
+        error=$exit_cde
+        if [ $AUTOSYS_MODE = Y ]
+           then
+           echo "[`date|awk '{print $2\" \"$3\" \"$4}'`] atmdeafms  has completed with errors" >> $sysout/zerobyte.log
+           checksts.sh GLATMEXT 4
+           exit $error
+        fi
+        checksts.sh GLATMEXT 4
+        checkrc.sh $error
+     fi
+   done
+   cd $spool
+   chmod 755 $spool/ATM_DEAF_???.txt
+   for i in `ls $spool/ATM_DEAF_???.txt`
+   do
+     cat ${i} >> $spool/ATM_DEAF.temp
+   done
+touch $spool/ATM_DEAF_${region_date}.txt
+chmod 755 $spool/ATM_DEAF_${region_date}.txt
+mv -f $spool/ATM_DEAF.temp $spool/ATM_DEAF_${region_date}.txt
+rm -f $spool/ATM_DEAF.temp
+else
+   export MULTISTREAM_ATM001="N"
+   echo "FLAG IS NOT SET TO Y IN ATM001MS.card"
+   echo "RUNNING ATM001 IN SINGLE STREAM."
+   atmdeaf
+   exit_cde=$?
+   if [ $exit_cde -ne "0" ];then
+      if [ $AUTOSYS_MODE = Y ];then
+         echo "[`date|awk '{print $2\" \"$3\" \"$4}'`] atmdeafms  has completed with errors" >> $sysout/zerobyte.log
+         checksts.sh GLATMEXT 4
+         exit $error
+      fi
+      checksts.sh GLATMEXT 4
+      checkrc.sh $error
+   fi
+fi
+checksts.sh GLATMEXT 4
+else
+  echo "Job can execute only on '$EXE_DATE' of the month" >> $sysout/zerobyte.log
+checksts.sh GLATMEXT 4
+fi
